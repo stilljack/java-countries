@@ -1,6 +1,5 @@
 package com.example.whatever.countries;
 
-import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -60,21 +59,53 @@ produces ={"application/json"})
     return new ResponseEntity<>(rtnCountries,HttpStatus.OK);
     
     
-    
+
     
 }
+
+/*/population/size/{people}
+
+return the countries that have a population equal to or greater than the given population
+*/
+@GetMapping(value = "/countries/popgreater/{pop}",
+        produces ={"application/json"})
+public ResponseEntity<?> getCountriesEqualOrGreater (@PathVariable int pop)
+{
+    ArrayList<Country> rtnCountries = CountriesApplication.ourCountriesList.findCountries(
+            c-> c.getPopulation()
+                    >=
+                    pop
+    );
+
+    rtnCountries.sort(getAlphabetizer());
+    return new ResponseEntity<>(rtnCountries,HttpStatus.OK);
+
+
+
+
+}
+
+/*
+return the country with the smallest population
+/population/max
+
+ */
+
+
+
+
+/*
+return the countries that have a population equal to or greater than the given population
+/population/min
+*/
 
     private Comparator<Country> getAlphabetizer() {
         return (c1, c2) -> c1.getName().compareToIgnoreCase(c2.getName());
     }
 
 
-/*
-return the countries that have a population equal to or greater than the given population
-/population/min
 
-return the country with the smallest population
-/population/max
+/*
 
 return the country with the largest population
     Stretch Goal
