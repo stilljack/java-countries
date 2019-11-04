@@ -86,16 +86,19 @@ public ResponseEntity<?> getCountriesEqualOrGreater (@PathVariable int pop)
 }
 
 /*
-return the country with the smallest population
 /population/max
-
  */
+@GetMapping(value = "/countries/popmax",
+        produces ={"application/json"})
+public ResponseEntity<?> getCountryPopMax (){
 
+            CountriesApplication.ourCountriesList.countryList.sort((e1,e2) -> (int)(e2.getPopulation() - e1.getPopulation()));
+    return new ResponseEntity<>(CountriesApplication.ourCountriesList.countryList, HttpStatus.OK);
+        }
 
 
 
 /*
-return the countries that have a population equal to or greater than the given population
 /population/min
 */
 
