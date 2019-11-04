@@ -92,8 +92,8 @@ public ResponseEntity<?> getCountriesEqualOrGreater (@PathVariable int pop)
         produces ={"application/json"})
 public ResponseEntity<?> getCountryPopMax (){
 
-            CountriesApplication.ourCountriesList.countryList.sort((e1,e2) -> (int)(e2.getPopulation() - e1.getPopulation()));
-    return new ResponseEntity<>(CountriesApplication.ourCountriesList.countryList, HttpStatus.OK);
+            CountriesApplication.ourCountriesList.countryList.sort((c1,c2) -> (int)(c2.getPopulation() - c1.getPopulation()));
+    return new ResponseEntity<>(CountriesApplication.ourCountriesList.countryList.get(0), HttpStatus.OK);
         }
 
 
@@ -101,7 +101,15 @@ public ResponseEntity<?> getCountryPopMax (){
 /*
 /population/min
 */
+@GetMapping(value = "/countries/popmin",
+        produces ={"application/json"})
+public ResponseEntity<?> getCountryPopmin (){
 
+    CountriesApplication.ourCountriesList.countryList.sort((c1,c2) -> (int)(c1.getPopulation() - c2.getPopulation()));
+ /*   ArrayList<Country> rtnlist = new ArrayList<Country>();
+    rtnlist.add(CountriesApplication.ourCountriesList.countryList.get(0));*/
+    return new ResponseEntity<>(CountriesApplication.ourCountriesList.countryList.get(0), HttpStatus.OK);
+}
     private Comparator<Country> getAlphabetizer() {
         return (c1, c2) -> c1.getName().compareToIgnoreCase(c2.getName());
     }
