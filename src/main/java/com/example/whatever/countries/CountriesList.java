@@ -4,6 +4,30 @@ import java.util.ArrayList;
 
 public class CountriesList {
 
+    public Country findCountry (CheckCountry CC) {
+        for (Country c: countryList) {
+            if (CC.test(c)) {
+                return c;
+            }
+
+        }
+
+        return null;
+    }
+
+    public ArrayList<Country> findCountries(CheckCountry CC) {
+        ArrayList<Country> tempCountryList = new ArrayList<Country>();
+
+        for (Country c:countryList) {
+            if(CC.test(c)) {
+                tempCountryList.add(c);
+            }
+        }
+
+
+        return tempCountryList;
+    }
+
     ArrayList<Country> countryList = new ArrayList<Country>();
     public CountriesList() {
         countryList.add(new Country("China",1420062022,9388211,39));
