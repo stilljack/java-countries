@@ -13,6 +13,9 @@ import java.util.Comparator;
 @RestController
 @RequestMapping("/data")
 public class CountryEnpointsRestController {
+    private Comparator<Country> getAlphabetizer() {
+        return (c1, c2) -> c1.getName().compareToIgnoreCase(c2.getName());
+    }
 
     @GetMapping(value ="/allCountries",
     produces = {"application/json"})
@@ -69,7 +72,7 @@ return the countries that have a population equal to or greater than the given p
 */
 @GetMapping(value = "/countries/popgreater/{pop}",
         produces ={"application/json"})
-public ResponseEntity<?> getCountriesEqualOrGreater (@PathVariable int pop)
+public ResponseEntity<?> getCountriesPopEqualOrGreater (@PathVariable int pop)
 {
     ArrayList<Country> rtnCountries = CountriesApplication.ourCountriesList.findCountries(
             c-> c.getPopulation()
@@ -110,13 +113,65 @@ public ResponseEntity<?> getCountryPopmin (){
     rtnlist.add(CountriesApplication.ourCountriesList.countryList.get(0));*/
     return new ResponseEntity<>(CountriesApplication.ourCountriesList.countryList.get(0), HttpStatus.OK);
 }
-    private Comparator<Country> getAlphabetizer() {
-        return (c1, c2) -> c1.getName().compareToIgnoreCase(c2.getName());
+
+/*/age/age/{age}
+
+return the countries that have a median age equal to or greater than the given age*/
+
+    @GetMapping(value = "/countries/age/{age}",
+            produces ={"application/json"})
+    public ResponseEntity<?> getCountriesAgeEqualOrGreater (@PathVariable int age)
+    {
+        ArrayList<Country> rtnCountries = CountriesApplication.ourCountriesList.findCountries(
+                c-> c.getMedianAge()
+                        >=
+                        age
+        );
+
+        rtnCountries.sort(getAlphabetizer());
+        return new ResponseEntity<>(rtnCountries,HttpStatus.OK);
+
+
+
+
+    }
+
+
+    /*
+    /age/max
+
+return the country the the greatest median age
+     */
+    @GetMapping(value = "/countries/age/max",
+            produces ={"application/json"})
+    public ResponseEntity<?> getCountryAgeMax (){
+
+        CountriesApplication.ourCountriesList.countryList.sort((c1,c2) -> (int)(c2.getMedianAge() - c1.getMedianAge()));
+        return new ResponseEntity<>(CountriesApplication.ourCountriesList.countryList.get(0), HttpStatus.OK);
     }
 
 
 
+    /*
+
+/age/min
+
+return the country with the smallest median age
+    */
+    @GetMapping(value = "/countries/age/min",
+            produces ={"application/json"})
+    public ResponseEntity<?> getCountryAgeMin (){
+
+        CountriesApplication.ourCountriesList.countryList.sort((c1,c2) -> (int)(c1.getMedianAge() - c2.getMedianAge()));
+
+        return new ResponseEntity<>(CountriesApplication.ourCountriesList.countryList.get(0), HttpStatus.OK);
+    }
+
+
+
+
 /*
+
 
 return the country with the largest population
     Stretch Goal
